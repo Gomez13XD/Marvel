@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Buscar personaje de Marvel</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<h1>Buscar personaje de Marvel</h1>
+<form>
+    <label for="id">ID del personaje:</label>
+    <input type="number" id="id" name="id" required>
+    <button type="submit">Buscar</button>
+</form>
+<hr>
+<div id="results"></div>
+
+<script>
+  const form = document.querySelector('form');
+  const results = document.querySelector('#results');
+
+  form.addEventListener('submit', event => {
+    event.preventDefault();
+    const id = document.querySelector('#id').value;
+    fetch(`/Marvel/get-char?id=${id}`)
+      .then(response => response.json())
+      .then(data => {
+        const name = data.data.results[0].name;
+        const description = data.data.results[0].description || 'No hay descripción disponible.';
+        const comics = data.data.results[0].comics.available;
+        results.innerHTML = `
+          <h2>${name}</h2>
+          <p>${description}</p>
+          <p>Cantidad de comics: ${comics}</p>
+        `;
+      })
+      .catch(error => {
+        results.innerHTML = `<p>${error}</p>`;
+        console.error(error);
+      });
+  });
+</script>
+</body>
+</html>
+
