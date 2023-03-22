@@ -27,8 +27,9 @@ public class MarvelApi implements Servlet {
 
         if (response.statusCode() == 200) {
                 return response.body();
-            }
-            else {
+            } else if (response.statusCode() == 404) {
+            return "El personaje no fue encontrado";
+        } else {
                 throw new RuntimeException("No se pudo obtener el personaje");
             }
 

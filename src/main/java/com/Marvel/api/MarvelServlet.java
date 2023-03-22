@@ -1,6 +1,7 @@
 package com.Marvel.api;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.Objects;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -14,7 +15,12 @@ public class MarvelServlet extends HttpServlet{
 
         try {
             String result = MarvelApi.getCharById(Integer.parseInt(id));
-            response.setContentType("application/json");
+            if (Objects.equals(result, "El personaje no fue encontrado")){
+                response.setContentType("text/plain");
+            }
+            else{
+                response.setContentType("application/json");
+            }
             response.getWriter().println(result);
         } catch (NumberFormatException e) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid id");

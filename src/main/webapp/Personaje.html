@@ -14,30 +14,42 @@
 <hr>
 <div id="results"></div>
 
-<script>
-  const form = document.querySelector('form');
-  const results = document.querySelector('#results');
 
-  form.addEventListener('submit', event => {
-    event.preventDefault();
-    const id = document.querySelector('#id').value;
-    fetch(`/Marvel/get-char?id=${id}`)
-      .then(response => response.json())
-      .then(data => {
-        const name = data.data.results[0].name;
-        const description = data.data.results[0].description || 'No hay descripción disponible.';
-        const comics = data.data.results[0].comics.available;
-        results.innerHTML = `
-          <h2>${name}</h2>
-          <p>${description}</p>
-          <p>Cantidad de comics: ${comics}</p>
-        `;
-      })
-      .catch(error => {
-        results.innerHTML = `<p>${error}</p>`;
-        console.error(error);
-      });
-  });
+<script>
+ const form = document.querySelector('form');
+ const results = document.querySelector('#results');
+
+
+ form.addEventListener('submit', event => {
+   event.preventDefault();
+   const id = document.querySelector('#id').value;
+   fetch(`/Marvel/get-char?id=${id}`)
+     .then(response => {
+         if(response.headers.get("content-type").includes("application/json")) {
+             return response.json();
+         } else {
+             return response.text();
+         }
+     })
+     .then(data => {
+         if(typeof data === "object") {
+             const name = data.data.results[0].name;
+             const description = data.data.results[0].description || 'No hay descripción disponible.';
+             const comics = data.data.results[0].comics.available;
+             results.innerHTML = `
+                 <h2>${name}</h2>
+                 <p>${description}</p>
+                 <p>Cantidad de comics: ${comics}</p>
+             `;
+         } else {
+             results.innerHTML = `<p>${data}</p>`;
+         }
+     })
+     .catch(error => {
+       results.innerHTML = `<p>${error}</p>`;
+       console.error(error);
+     });
+ });
 </script>
 </body>
 </html>

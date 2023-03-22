@@ -4,7 +4,9 @@
 
 <web-app>
   <display-name>Personaje Marvel</display-name>
-
+  <welcome-file-list>
+    <welcome-file>Personaje.html</welcome-file>
+  </welcome-file-list>
 <!--  <servlet>-->
 <!--    <servlet-name>MarvelApi</servlet-name>-->
 <!--    <servlet-class>com.Marvel.api.MarvelApi</servlet-class>-->
